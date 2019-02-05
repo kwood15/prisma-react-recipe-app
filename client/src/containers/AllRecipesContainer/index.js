@@ -1,48 +1,59 @@
-import React, { Component, Fragment } from "react";
-import { graphql, compose, withApollo } from "react-apollo";
-import { Card, Col, Row, Empty, Spin, Button, notification } from "antd";
+import React, { Component, Fragment } from 'react';
+import { graphql, compose, withApollo } from 'react-apollo';
+import {
+  Layout,
+  Card,
+  Col,
+  Row,
+  Empty,
+  Spin,
+  Button,
+  notification
+} from 'antd';
 
 // components
-import ViewRecipeModal from "../../components/modals/ViewRecipeModal";
-import AddRecipeModal from "../../components/modals/AddRecipeModal";
-import RecipeCard from "../../components/RecipeCard";
+import ViewRecipeModal from '../../components/modals/ViewRecipeModal';
+import AddRecipeModal from '../../components/modals/AddRecipeModal';
+import RecipeCard from '../../components/RecipeCard';
 
 // queries
-import GetAllPublishedRecipes from "../../graphql/queries/GetAllPublishedRecipes";
-import GetSingleRecipe from "../../graphql/queries/GetSingleRecipe";
+import GetAllPublishedRecipes from '../../graphql/queries/GetAllPublishedRecipes';
+import GetSingleRecipe from '../../graphql/queries/GetSingleRecipe';
 
 // mutations
-import UpdateRecipe from "../../graphql/mutations/UpdateRecipe";
-import AddNewRecipe from "../../graphql/mutations/AddNewRecipe";
+import UpdateRecipe from '../../graphql/mutations/UpdateRecipe';
+import AddNewRecipe from '../../graphql/mutations/AddNewRecipe';
+
+const { Sider } = Layout;
 
 const initialState = {
   form: {
-    directions: "",
-    ingredients: "",
-    title: "",
+    directions: '',
+    ingredients: '',
+    title: '',
     published: false
   },
   notification: {
     notificationOpen: false,
-    message: "",
-    title: "",
-    type: ""
+    message: '',
+    title: '',
+    type: ''
   },
   viewModalOpen: false,
   addModalOpen: false,
   recipeData: {},
-  recipeId: "",
+  recipeId: '',
   isEditing: false
 };
 
 class AllRecipesContainer extends Component {
   state = initialState;
 
-  _handleResetState = () => {
+  handleResetState = () => {
     this.setState({ ...initialState });
   };
 
-  _handleChange = event => {
+  handleChange = event => {
     event.persist();
 
     this.setState((prevState, nextProps) => ({
@@ -50,13 +61,13 @@ class AllRecipesContainer extends Component {
     }));
   };
 
-  _handleChecked = checked => {
+  handleChecked = checked => {
     this.setState((prevState, nextProps) => ({
       form: { ...prevState.form, published: checked }
     }));
   };
 
-  _handleOnClick = recipeId => {
+  handleOnClick = recipeId => {
     this.props.client
       .query({
         query: GetSingleRecipe,
@@ -72,13 +83,13 @@ class AllRecipesContainer extends Component {
       });
   };
 
-  _handleOpenAddModal = () => {
+  handleOpenAddModal = () => {
     this.setState((prevState, nextProps) => ({
       addModalOpen: true
     }));
   };
 
-  _handleOnEdit = ({ id, directions, ingredients, title, published }) => {
+  handleOnEdit = ({ id, directions, ingredients, title, published }) => {
     this.setState((prevState, nextProps) => ({
       form: {
         directions,
@@ -92,7 +103,7 @@ class AllRecipesContainer extends Component {
     }));
   };
 
-  _handleCloseModal = () => {
+  handleCloseModal = () => {
     this.setState((prevState, nextProps) => ({
       viewModalOpen: false,
       isEditing: false,
@@ -134,12 +145,12 @@ class AllRecipesContainer extends Component {
                 (prevState, nextProps) => ({
                   notification: {
                     notificationOpen: true,
-                    type: "success",
+                    type: 'success',
                     message: `recipe ${title} ${action} successfully`,
-                    title: "Success"
+                    title: 'Success'
                   }
                 }),
-                () => this._handleResetState()
+                () => this.handleResetState()
               )
           );
         }
@@ -149,26 +160,26 @@ class AllRecipesContainer extends Component {
           notification: {
             ...prevState.notification,
             notificationOpen: true,
-            type: "error",
+            type: 'error',
             message: e.message,
-            title: "Error Occured"
+            title: 'Error Occured'
           }
         }));
       });
   };
 
-  _handleOnDelete = ({ id, directions, ingredients, title }) => {
+  handleOnDelete = ({ id, directions, ingredients, title }) => {
     this._updateRecipe({
       id,
       directions,
       ingredients,
       title,
       published: false,
-      action: "deleted"
+      action: 'deleted'
     });
   };
 
-  _handleSubmit = event => {
+  handleSubmit = event => {
     const { directions, ingredients, title, published } = this.state.form;
     const { recipeId, isEditing } = this.state;
 
@@ -179,7 +190,7 @@ class AllRecipesContainer extends Component {
         ingredients,
         title,
         published,
-        action: "edited"
+        action: 'edited'
       });
     } else {
       this.props
@@ -207,12 +218,12 @@ class AllRecipesContainer extends Component {
                   (prevState, nextProps) => ({
                     notification: {
                       notificationOpen: true,
-                      type: "success",
+                      type: 'success',
                       message: `recipe ${title} added successfully`,
-                      title: "Success"
+                      title: 'Success'
                     }
                   }),
-                  () => this._handleResetState()
+                  () => this.handleResetState()
                 )
             );
           }
@@ -222,16 +233,16 @@ class AllRecipesContainer extends Component {
             notification: {
               ...prevState.notification,
               notificationOpen: true,
-              type: "error",
+              type: 'error',
               message: e.message,
-              title: "Error Occured"
+              title: 'Error Occured'
             }
           }));
         });
     }
   };
 
-  _renderNotification = () => {
+  renderNotification = () => {
     const { notificationOpen, type, title, message } = this.state.notification;
 
     if (notificationOpen) {
@@ -241,6 +252,7 @@ class AllRecipesContainer extends Component {
       });
     }
   };
+
   render() {
     const { loading, recipes } = this.props.data;
     const { viewModalOpen, recipeData, isEditing, addModalOpen } = this.state;
@@ -248,7 +260,7 @@ class AllRecipesContainer extends Component {
     return (
       <Fragment>
         <ViewRecipeModal
-          handleCloseModal={this._handleCloseModal}
+          handleCloseModal={this.handleCloseModal}
           modalOpen={viewModalOpen}
           recipe={recipeData}
         />
@@ -264,12 +276,12 @@ class AllRecipesContainer extends Component {
                 <Col span={6} key={recipe.id}>
                   <RecipeCard
                     title={recipe.title}
-                    content={
+                    content={(
                       <Fragment>
                         <Card
                           type="inner"
                           title="Ingredients"
-                          style={{ marginBottom: "15px" }}
+                          style={{ marginBottom: '15px' }}
                         >
                           {`${recipe.ingredients.substring(0, 50)}.....`}
                         </Card>
@@ -277,10 +289,10 @@ class AllRecipesContainer extends Component {
                           {`${recipe.directions.substring(0, 50)}.....`}
                         </Card>
                       </Fragment>
-                    }
-                    handleOnClick={this._handleOnClick}
-                    handleOnEdit={this._handleOnEdit}
-                    handleOnDelete={this._handleOnDelete}
+)}
+                    handleOnClick={this.handleOnClick}
+                    handleOnEdit={this.handleOnEdit}
+                    handleOnDelete={this.handleOnDelete}
                     {...recipe}
                   />
                 </Col>
@@ -291,10 +303,10 @@ class AllRecipesContainer extends Component {
           )}
           <AddRecipeModal
             modalOpen={addModalOpen || isEditing}
-            handleCloseModal={this._handleCloseModal}
-            handleSubmit={this._handleSubmit}
-            handleChecked={this._handleChecked}
-            handleChange={this._handleChange}
+            handleCloseModal={this.handleCloseModal}
+            handleSubmit={this.handleSubmit}
+            handleChecked={this.handleChecked}
+            handleChange={this.handleChange}
             {...this.state.form}
           />
           <div className="fab-container">
@@ -303,10 +315,10 @@ class AllRecipesContainer extends Component {
               shape="circle"
               icon="plus"
               size="large"
-              onClick={this._handleOpenAddModal}
+              onClick={this.handleOpenAddModal}
             />
           </div>
-          {this._renderNotification()}
+          {this.renderNotification()}
         </Sider>
       </Fragment>
     );
@@ -314,7 +326,7 @@ class AllRecipesContainer extends Component {
 }
 
 export default compose(
-  graphql(UpdateRecipe, { name: "updateRecipeMutation" }),
-  graphql(AddNewRecipe, { name: "addNewRecipeMutation" }),
+  graphql(UpdateRecipe, { name: 'updateRecipeMutation' }),
+  graphql(AddNewRecipe, { name: 'addNewRecipeMutation' }),
   graphql(GetAllPublishedRecipes)
 )(withApollo(AllRecipesContainer));

@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { Popconfirm, Card, Icon } from "antd";
+import React, { Fragment } from 'react';
+import { Popconfirm, Card, Icon } from 'antd';
 
 const RecipeCard = ({
   title,
@@ -16,7 +16,7 @@ const RecipeCard = ({
     <Card
       title={title}
       bordered={false}
-      extra={
+      extra={(
         <Fragment>
           <span
             className="pointer"
@@ -26,9 +26,9 @@ const RecipeCard = ({
           >
             <Icon
               style={{
-                fontSize: "1.25rem",
-                color: "#08c",
-                marginRight: "0.625rem"
+                fontSize: '1.25rem',
+                color: '#08c',
+                marginRight: '0.625rem'
               }}
               type="edit"
             />
@@ -49,9 +49,9 @@ const RecipeCard = ({
             <span className="pointer">
               <Icon
                 style={{
-                  fontSize: "1.25rem",
-                  color: "#08c",
-                  marginRight: "0.625rem"
+                  fontSize: '1.25rem',
+                  color: '#08c',
+                  marginRight: '0.625rem'
                 }}
                 type="delete"
               />
@@ -60,17 +60,17 @@ const RecipeCard = ({
           <span className="pointer">
             <Icon
               style={{
-                fontSize: "1.25rem",
-                color: "#08c"
+                fontSize: '1.25rem',
+                color: '#08c'
               }}
               type="eye"
               onClick={() => handleOnClick(id)}
             />
           </span>
         </Fragment>
-      }
+)}
       style={{
-        marginBottom: "50px"
+        marginBottom: '50px'
       }}
     >
       {content}
