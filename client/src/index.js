@@ -7,7 +7,7 @@ import App from './components/App';
 
 // Pass your prisma endpoint to uri
 const client = new ApolloClient({
-  uri: 'https://eu1.prisma.sh/XXXXXX'
+  uri: 'http://192.168.99.100:4466/'
 });
 
 ReactDOM.render(

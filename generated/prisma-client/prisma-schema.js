@@ -1,5 +1,5 @@
 module.exports = {
-        typeDefs: /* GraphQL */ `type AggregateUser {
+  typeDefs: /* GraphQL */ `type AggregateUser {
   count: Int!
 }
 
@@ -146,5 +146,4 @@ input UserWhereUniqueInput {
   id: ID
 }
 `
-      }
-    
+}
