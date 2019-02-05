@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import AllRecipesContainer from '../containers/AllRecipesContainer';
+import AllRecipesContainer from "./containers/AllRecipesContainer";
 
-import 'main.css';
+import "./main.css";
 
 class App extends Component {
   render() {

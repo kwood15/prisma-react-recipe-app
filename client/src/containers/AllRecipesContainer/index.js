@@ -1,37 +1,37 @@
-import React, { Component, Fragment } from 'react';
-import { graphql, compose, withApollo } from 'react-apollo';
-import { Card, Col, Row, Empty, Spin, Button, notification } from 'antd';
+import React, { Component, Fragment } from "react";
+import { graphql, compose, withApollo } from "react-apollo";
+import { Card, Col, Row, Empty, Spin, Button, notification } from "antd";
 
 // components
-import ViewRecipeModal from '../../components/modals/ViewRecipeModal';
-import AddRecipeModal from '../../components/modals/AddRecipeModal';
-import RecipeCard from '../../components/RecipeCard';
+import ViewRecipeModal from "../../components/modals/ViewRecipeModal";
+import AddRecipeModal from "../../components/modals/AddRecipeModal";
+import RecipeCard from "../../components/RecipeCard";
 
 // queries
-import GetAllPublishedRecipes from '../../graphql/queries/GetAllPublishedRecipes';
-import GetSingleRecipe from '../../graphql/queries/GetSingleRecipe';
+import GetAllPublishedRecipes from "../../graphql/queries/GetAllPublishedRecipes";
+import GetSingleRecipe from "../../graphql/queries/GetSingleRecipe";
 
 // mutations
-import UpdateRecipe from '../../graphql/mutations/UpdateRecipe';
-import AddNewRecipe from '../../graphql/mutations/AddNewRecipe';
+import UpdateRecipe from "../../graphql/mutations/UpdateRecipe";
+import AddNewRecipe from "../../graphql/mutations/AddNewRecipe";
 
 const initialState = {
   form: {
-    directions: '',
-    ingredients: '',
-    title: '',
+    directions: "",
+    ingredients: "",
+    title: "",
     published: false
   },
   notification: {
     notificationOpen: false,
-    message: '',
-    title: '',
-    type: ''
+    message: "",
+    title: "",
+    type: ""
   },
   viewModalOpen: false,
   addModalOpen: false,
   recipeData: {},
-  recipeId: '',
+  recipeId: "",
   isEditing: false
 };
 
@@ -134,9 +134,9 @@ class AllRecipesContainer extends Component {
                 (prevState, nextProps) => ({
                   notification: {
                     notificationOpen: true,
-                    type: 'success',
+                    type: "success",
                     message: `recipe ${title} ${action} successfully`,
-                    title: 'Success'
+                    title: "Success"
                   }
                 }),
                 () => this._handleResetState()
@@ -149,9 +149,9 @@ class AllRecipesContainer extends Component {
           notification: {
             ...prevState.notification,
             notificationOpen: true,
-            type: 'error',
+            type: "error",
             message: e.message,
-            title: 'Error Occured'
+            title: "Error Occured"
           }
         }));
       });
@@ -164,7 +164,7 @@ class AllRecipesContainer extends Component {
       ingredients,
       title,
       published: false,
-      action: 'deleted'
+      action: "deleted"
     });
   };
 
@@ -179,7 +179,7 @@ class AllRecipesContainer extends Component {
         ingredients,
         title,
         published,
-        action: 'edited'
+        action: "edited"
       });
     } else {
       this.props
@@ -207,9 +207,9 @@ class AllRecipesContainer extends Component {
                   (prevState, nextProps) => ({
                     notification: {
                       notificationOpen: true,
-                      type: 'success',
+                      type: "success",
                       message: `recipe ${title} added successfully`,
-                      title: 'Success'
+                      title: "Success"
                     }
                   }),
                   () => this._handleResetState()
@@ -222,9 +222,9 @@ class AllRecipesContainer extends Component {
             notification: {
               ...prevState.notification,
               notificationOpen: true,
-              type: 'error',
+              type: "error",
               message: e.message,
-              title: 'Error Occured'
+              title: "Error Occured"
             }
           }));
         });
@@ -253,7 +253,7 @@ class AllRecipesContainer extends Component {
           recipe={recipeData}
         />
 
-        <SideBar>
+        <Sider>
           {loading ? (
             <div className="spin-container">
               <Spin />
@@ -269,7 +269,7 @@ class AllRecipesContainer extends Component {
                         <Card
                           type="inner"
                           title="Ingredients"
-                          style={{ marginBottom: '15px' }}
+                          style={{ marginBottom: "15px" }}
                         >
                           {`${recipe.ingredients.substring(0, 50)}.....`}
                         </Card>
@@ -287,8 +287,8 @@ class AllRecipesContainer extends Component {
               ))}
             </Row>
           ) : (
-                <Empty />
-              )}
+            <Empty />
+          )}
           <AddRecipeModal
             modalOpen={addModalOpen || isEditing}
             handleCloseModal={this._handleCloseModal}
@@ -307,14 +307,14 @@ class AllRecipesContainer extends Component {
             />
           </div>
           {this._renderNotification()}
-        </SideBar>
+        </Sider>
       </Fragment>
     );
   }
 }
 
 export default compose(
-  graphql(UpdateRecipe, { name: 'updateRecipeMutation' }),
-  graphql(AddNewRecipe, { name: 'addNewRecipeMutation' }),
+  graphql(UpdateRecipe, { name: "updateRecipeMutation" }),
+  graphql(AddNewRecipe, { name: "addNewRecipeMutation" }),
   graphql(GetAllPublishedRecipes)
 )(withApollo(AllRecipesContainer));
