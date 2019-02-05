@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, Modal } from 'antd';
 
 const ViewRecipeModal = ({ modalOpen, recipe, handleCloseModal }) => (
@@ -17,5 +18,14 @@ const ViewRecipeModal = ({ modalOpen, recipe, handleCloseModal }) => (
     </Card>
   </Modal>
 );
+
+ViewRecipeModal.propTypes = {
+  modalOpen: PropTypes.bool.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
+  recipe: PropTypes.shape({
+    ingredients: PropTypes.string,
+    directions: PropTypes.string
+  }).isRequired
+};
 
 export default ViewRecipeModal;

@@ -1,17 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, Form, Input, Switch } from 'antd';
 
 const formItemLayout = { labelCol: { span: 5 }, wrapperCol: { span: 14 } };
 
 const AddRecipeModal = ({
   modalOpen,
-  handleSubmit,
-  handleCloseModal,
+  title,
+  ingredients = '',
+  directions,
   handleChecked,
   handleChange,
-  title,
-  ingredients,
-  directions,
+  handleSubmit,
+  handleCloseModal,
   published,
   ...props
 }) => (
@@ -21,6 +22,7 @@ const AddRecipeModal = ({
     visible={modalOpen}
     onOk={handleSubmit}
     onCancel={handleCloseModal}
+    {...props}
   >
     <Form layout="horizontal">
       <Form.Item label="Title" {...formItemLayout}>
@@ -53,6 +55,18 @@ const AddRecipeModal = ({
     </Form>
   </Modal>
 );
+
+AddRecipeModal.propTypes = {
+  modalOpen: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  ingredients: PropTypes.string.isRequired,
+  directions: PropTypes.string.isRequired,
+  handleChecked: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
+  published: PropTypes.bool.isRequired
+};
 
 const WrappedForm = Form.create({ name: 'add-new-recipe' })(AddRecipeModal);
 

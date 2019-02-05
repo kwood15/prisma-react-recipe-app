@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import { Popconfirm, Card, Icon } from 'antd';
+import PropTypes from 'prop-types';
+import { Popconfirm, Card, Icon, Button } from 'antd';
 
 const RecipeCard = ({
   title,
@@ -18,8 +19,7 @@ const RecipeCard = ({
       bordered={false}
       extra={(
         <Fragment>
-          <span
-            className="pointer"
+          <Button
             onClick={() =>
               handleOnEdit({ id, directions, ingredients, title, published })
             }
@@ -32,7 +32,7 @@ const RecipeCard = ({
               }}
               type="edit"
             />
-          </span>
+          </Button>
           <Popconfirm
             title="Are you sure you want to delete this recipe?"
             onConfirm={() =>
@@ -76,6 +76,18 @@ const RecipeCard = ({
       {content}
     </Card>
   );
+};
+
+RecipeCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  directions: PropTypes.string.isRequired,
+  ingredients: PropTypes.string.isRequired,
+  handleOnEdit: PropTypes.func.isRequired,
+  handleOnClick: PropTypes.func.isRequired,
+  handleOnDelete: PropTypes.func.isRequired,
+  published: PropTypes.instanceOf(Date).isRequired
 };
 
 export default RecipeCard;

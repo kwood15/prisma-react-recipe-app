@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { graphql, compose, withApollo } from 'react-apollo';
 import {
   Layout,
@@ -56,19 +57,26 @@ class AllRecipesContainer extends Component {
   handleChange = event => {
     event.persist();
 
-    this.setState((prevState, nextProps) => ({
-      form: { ...prevState.form, [event.target.name]: event.target.value }
+    this.setState(prevState => ({
+      form: {
+        ...prevState.form,
+        [event.target.name]: event.target.value
+      }
     }));
   };
 
   handleChecked = checked => {
-    this.setState((prevState, nextProps) => ({
-      form: { ...prevState.form, published: checked }
+    this.setState(prevState => ({
+      form: {
+        ...prevState.form,
+        published: checked
+      }
     }));
   };
 
   handleOnClick = recipeId => {
-    this.props.client
+    const { client } = this.props;
+    client
       .query({
         query: GetSingleRecipe,
         variables: {
@@ -76,21 +84,21 @@ class AllRecipesContainer extends Component {
         }
       })
       .then(res => {
-        this.setState((prevState, nextProps) => ({
+        this.setState({
           viewModalOpen: true,
           recipeData: res.data.recipe
-        }));
+        });
       });
   };
 
   handleOpenAddModal = () => {
-    this.setState((prevState, nextProps) => ({
+    this.setState({
       addModalOpen: true
-    }));
+    });
   };
 
   handleOnEdit = ({ id, directions, ingredients, title, published }) => {
-    this.setState((prevState, nextProps) => ({
+    this.setState({
       form: {
         directions,
         ingredients,
@@ -100,18 +108,18 @@ class AllRecipesContainer extends Component {
       modalOpen: true,
       isEditing: true,
       recipeId: id
-    }));
+    });
   };
 
   handleCloseModal = () => {
-    this.setState((prevState, nextProps) => ({
+    this.setState({
       viewModalOpen: false,
       isEditing: false,
       addModalOpen: false
-    }));
+    });
   };
 
-  _updateRecipe = ({
+  updateRecipe = ({
     id,
     directions,
     ingredients,
@@ -119,30 +127,30 @@ class AllRecipesContainer extends Component {
     published,
     action
   }) => {
-    this.props
-      .updateRecipeMutation({
-        variables: {
-          id,
-          directions,
-          title,
-          ingredients,
-          published
-        },
-        refetchQueries: [
-          {
-            query: GetAllPublishedRecipes
-          }
-        ]
-      })
+    const { updateRecipeMutation } = this.props;
+    updateRecipeMutation({
+      variables: {
+        id,
+        directions,
+        title,
+        ingredients,
+        published
+      },
+      refetchQueries: [
+        {
+          query: GetAllPublishedRecipes
+        }
+      ]
+    })
       .then(res => {
         if (res.data.updateRecipe.id) {
           this.setState(
-            (prevState, nextProps) => ({
+            () => ({
               isEditing: false
             }),
             () =>
               this.setState(
-                (prevState, nextProps) => ({
+                () => ({
                   notification: {
                     notificationOpen: true,
                     type: 'success',
@@ -156,7 +164,7 @@ class AllRecipesContainer extends Component {
         }
       })
       .catch(e => {
-        this.setState((prevState, nextProps) => ({
+        this.setState(prevState => ({
           notification: {
             ...prevState.notification,
             notificationOpen: true,
@@ -169,7 +177,7 @@ class AllRecipesContainer extends Component {
   };
 
   handleOnDelete = ({ id, directions, ingredients, title }) => {
-    this._updateRecipe({
+    this.updateRecipe({
       id,
       directions,
       ingredients,
@@ -179,12 +187,14 @@ class AllRecipesContainer extends Component {
     });
   };
 
-  handleSubmit = event => {
-    const { directions, ingredients, title, published } = this.state.form;
+  handleSubmit = () => {
+    const {
+      form: { directions, ingredients, title, published }
+    } = this.state;
     const { recipeId, isEditing } = this.state;
 
     if (isEditing) {
-      this._updateRecipe({
+      this.updateRecipe({
         id: recipeId,
         directions,
         ingredients,
@@ -193,29 +203,29 @@ class AllRecipesContainer extends Component {
         action: 'edited'
       });
     } else {
-      this.props
-        .addNewRecipeMutation({
-          variables: {
-            directions,
-            title,
-            ingredients,
-            published
-          },
-          refetchQueries: [
-            {
-              query: GetAllPublishedRecipes
-            }
-          ]
-        })
+      const { addNewRecipeMutation } = this.props;
+      addNewRecipeMutation({
+        variables: {
+          directions,
+          title,
+          ingredients,
+          published
+        },
+        refetchQueries: [
+          {
+            query: GetAllPublishedRecipes
+          }
+        ]
+      })
         .then(res => {
           if (res.data.createRecipe.id) {
             this.setState(
-              (prevState, nextProps) => ({
+              () => ({
                 addModalOpen: false
               }),
               () =>
                 this.setState(
-                  (prevState, nextProps) => ({
+                  () => ({
                     notification: {
                       notificationOpen: true,
                       type: 'success',
@@ -229,7 +239,7 @@ class AllRecipesContainer extends Component {
           }
         })
         .catch(e => {
-          this.setState((prevState, nextProps) => ({
+          this.setState(prevState => ({
             notification: {
               ...prevState.notification,
               notificationOpen: true,
@@ -243,7 +253,9 @@ class AllRecipesContainer extends Component {
   };
 
   renderNotification = () => {
-    const { notificationOpen, type, title, message } = this.state.notification;
+    const {
+      notification: { notificationOpen, type, title, message }
+    } = this.state;
 
     if (notificationOpen) {
       notification[type]({
@@ -254,8 +266,16 @@ class AllRecipesContainer extends Component {
   };
 
   render() {
-    const { loading, recipes } = this.props.data;
-    const { viewModalOpen, recipeData, isEditing, addModalOpen } = this.state;
+    const {
+      data: { loading, recipes }
+    } = this.props;
+    const {
+      viewModalOpen,
+      recipeData,
+      isEditing,
+      addModalOpen,
+      form
+    } = this.state;
 
     return (
       <Fragment>
@@ -266,11 +286,12 @@ class AllRecipesContainer extends Component {
         />
 
         <Sider>
-          {loading ? (
+          {loading && (
             <div className="spin-container">
               <Spin />
             </div>
-          ) : recipes.length > 0 ? (
+          )}
+          {recipes && recipes.length > 0 ? (
             <Row gutter={16}>
               {recipes.map(recipe => (
                 <Col span={6} key={recipe.id}>
@@ -307,7 +328,7 @@ class AllRecipesContainer extends Component {
             handleSubmit={this.handleSubmit}
             handleChecked={this.handleChecked}
             handleChange={this.handleChange}
-            {...this.state.form}
+            {...form}
           />
           <div className="fab-container">
             <Button
@@ -324,6 +345,17 @@ class AllRecipesContainer extends Component {
     );
   }
 }
+
+AllRecipesContainer.propTypes = {
+  client: PropTypes.shape({}).isRequired,
+  // eslint-disable-next-line react/require-default-props
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    recipes: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
+  addNewRecipeMutation: PropTypes.func.isRequired,
+  updateRecipeMutation: PropTypes.func.isRequired
+};
 
 export default compose(
   graphql(UpdateRecipe, { name: 'updateRecipeMutation' }),
