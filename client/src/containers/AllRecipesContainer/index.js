@@ -1,16 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose, withApollo } from 'react-apollo';
-import {
-  Layout,
-  Card,
-  Col,
-  Row,
-  Empty,
-  Spin,
-  Button,
-  notification
-} from 'antd';
+import { Card, Col, Row, Empty, Spin, Button, notification } from 'antd';
 
 // components
 import ViewRecipeModal from '../../components/modals/ViewRecipeModal';
@@ -24,8 +15,6 @@ import GetSingleRecipe from '../../graphql/queries/GetSingleRecipe';
 // mutations
 import UpdateRecipe from '../../graphql/mutations/UpdateRecipe';
 import AddNewRecipe from '../../graphql/mutations/AddNewRecipe';
-
-const { Sider } = Layout;
 
 const initialState = {
   form: {
@@ -49,6 +38,10 @@ const initialState = {
 
 class AllRecipesContainer extends Component {
   state = initialState;
+
+  componentDidUpdate() {
+    this.renderNotification();
+  }
 
   handleResetState = () => {
     this.setState({ ...initialState });
@@ -267,15 +260,15 @@ class AllRecipesContainer extends Component {
 
   render() {
     const {
-      data: { loading, recipes }
-    } = this.props;
-    const {
       viewModalOpen,
       recipeData,
       isEditing,
       addModalOpen,
       form
     } = this.state;
+    const {
+      data: { loading, recipes }
+    } = this.props;
 
     return (
       <Fragment>
@@ -285,7 +278,7 @@ class AllRecipesContainer extends Component {
           recipe={recipeData}
         />
 
-        <Sider>
+        <div>
           {loading && (
             <div className="spin-container">
               <Spin />
@@ -339,8 +332,7 @@ class AllRecipesContainer extends Component {
               onClick={this.handleOpenAddModal}
             />
           </div>
-          {this.renderNotification()}
-        </Sider>
+        </div>
       </Fragment>
     );
   }
@@ -348,13 +340,12 @@ class AllRecipesContainer extends Component {
 
 AllRecipesContainer.propTypes = {
   client: PropTypes.shape({}).isRequired,
-  // eslint-disable-next-line react/require-default-props
+  addNewRecipeMutation: PropTypes.func.isRequired,
+  updateRecipeMutation: PropTypes.func.isRequired,
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     recipes: PropTypes.arrayOf(PropTypes.shape({}))
-  }),
-  addNewRecipeMutation: PropTypes.func.isRequired,
-  updateRecipeMutation: PropTypes.func.isRequired
+  })
 };
 
 export default compose(

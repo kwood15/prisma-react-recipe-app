@@ -79,15 +79,15 @@ const RecipeCard = ({
 };
 
 RecipeCard.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.shape({}),
   directions: PropTypes.string.isRequired,
   ingredients: PropTypes.string.isRequired,
   handleOnEdit: PropTypes.func.isRequired,
   handleOnClick: PropTypes.func.isRequired,
   handleOnDelete: PropTypes.func.isRequired,
-  published: PropTypes.instanceOf(Date).isRequired
+  published: PropTypes.bool.isRequired
 };
 
 export default RecipeCard;
