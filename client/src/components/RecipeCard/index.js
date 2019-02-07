@@ -6,9 +6,9 @@ const RecipeCard = ({
   title,
   content,
   id,
-  handleOnClick,
-  handleOnEdit,
-  handleOnDelete,
+  handleClick,
+  handleEdit,
+  handleDelete,
   directions,
   ingredients,
   published
@@ -28,7 +28,7 @@ const RecipeCard = ({
         <Fragment>
           <Button
             onClick={() =>
-              handleOnEdit({ id, directions, ingredients, title, published })
+              handleEdit({ id, directions, ingredients, title, published })
             }
           >
             <Icon
@@ -43,7 +43,7 @@ const RecipeCard = ({
           <Popconfirm
             title="Are you sure you want to delete this recipe?"
             onConfirm={() =>
-              handleOnDelete({
+              handleDelete({
                 id,
                 directions,
                 ingredients,
@@ -71,7 +71,7 @@ const RecipeCard = ({
                 color: '#08c'
               }}
               type="eye"
-              onClick={() => handleOnClick(id)}
+              onClick={() => handleClick(id)}
             />
           </span>
         </Fragment>
@@ -92,9 +92,9 @@ RecipeCard.propTypes = {
   published: PropTypes.bool.isRequired,
   directions: PropTypes.string.isRequired,
   ingredients: PropTypes.string.isRequired,
-  handleOnEdit: PropTypes.func.isRequired,
-  handleOnClick: PropTypes.func.isRequired,
-  handleOnDelete: PropTypes.func.isRequired
+  handleEdit: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired
 };
 
 export default RecipeCard;

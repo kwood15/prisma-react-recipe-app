@@ -2,7 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Form, Input, Switch } from 'antd';
 
-const formItemLayout = { labelCol: { span: 5 }, wrapperCol: { span: 14 } };
+const formItemLayout = {
+  labelCol: {
+    span: 5
+  },
+  wrapperCol: {
+    span: 14
+  }
+};
 
 const AddRecipeModal = ({
   modalOpen,
@@ -12,7 +19,7 @@ const AddRecipeModal = ({
   handleChecked,
   handleChange,
   handleSubmit,
-  handleCloseModal,
+  handleClose,
   published,
   ...props
 }) => (
@@ -21,7 +28,7 @@ const AddRecipeModal = ({
     centered
     visible={modalOpen}
     onOk={handleSubmit}
-    onCancel={handleCloseModal}
+    onCancel={handleClose}
     {...props}
   >
     <Form layout="horizontal">
@@ -64,7 +71,7 @@ AddRecipeModal.propTypes = {
   handleChecked: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  handleCloseModal: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
   published: PropTypes.bool.isRequired
 };
 

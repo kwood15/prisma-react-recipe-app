@@ -67,7 +67,7 @@ class AllRecipesContainer extends Component {
     }));
   };
 
-  handleOnClick = recipeId => {
+  handleClick = recipeId => {
     const { client } = this.props;
     client
       .query({
@@ -84,13 +84,13 @@ class AllRecipesContainer extends Component {
       });
   };
 
-  handleOpenAddModal = () => {
+  handleOpen = () => {
     this.setState({
       addModalOpen: true
     });
   };
 
-  handleOnEdit = ({ id, directions, ingredients, title, published }) => {
+  handleEdit = ({ id, directions, ingredients, title, published }) => {
     this.setState({
       form: {
         directions,
@@ -104,7 +104,7 @@ class AllRecipesContainer extends Component {
     });
   };
 
-  handleCloseModal = () => {
+  handleClose = () => {
     this.setState({
       viewModalOpen: false,
       isEditing: false,
@@ -137,24 +137,23 @@ class AllRecipesContainer extends Component {
     })
       .then(res => {
         if (res.data.updateRecipe.id) {
-          this.setState(
-            () => ({
-              isEditing: false
-            }),
-            () =>
-              this.setState(
-                () => ({
-                  notification: {
-                    notificationOpen: true,
-                    type: 'success',
-                    message: `recipe ${title} ${action} successfully`,
-                    title: 'Success'
-                  }
-                }),
-                () => this.handleResetState()
-              )
-          );
+          this.setState({
+            isEditing: false
+          });
         }
+      })
+      .then(() => {
+        this.setState(
+          {
+            notification: {
+              notificationOpen: true,
+              type: 'success',
+              message: `recipe ${title} ${action} successfully`,
+              title: 'Success'
+            }
+          },
+          () => this.handleResetState()
+        );
       })
       .catch(e => {
         this.setState(prevState => ({
@@ -169,7 +168,7 @@ class AllRecipesContainer extends Component {
       });
   };
 
-  handleOnDelete = ({ id, directions, ingredients, title }) => {
+  handleDelete = ({ id, directions, ingredients, title }) => {
     this.updateRecipe({
       id,
       directions,
@@ -273,7 +272,7 @@ class AllRecipesContainer extends Component {
     return (
       <Fragment>
         <ViewRecipeModal
-          handleCloseModal={this.handleCloseModal}
+          handleClose={this.handleClose}
           modalOpen={viewModalOpen}
           recipe={recipeData}
         />
@@ -304,9 +303,9 @@ class AllRecipesContainer extends Component {
                         </Card>
                       </Fragment>
 )}
-                    handleOnClick={this.handleOnClick}
-                    handleOnEdit={this.handleOnEdit}
-                    handleOnDelete={this.handleOnDelete}
+                    handleClick={this.handleClick}
+                    handleEdit={this.handleEdit}
+                    handleDelete={this.handleDelete}
                     {...recipe}
                   />
                 </Col>
@@ -317,7 +316,7 @@ class AllRecipesContainer extends Component {
           )}
           <AddRecipeModal
             modalOpen={addModalOpen || isEditing}
-            handleCloseModal={this.handleCloseModal}
+            handleClose={this.handleClose}
             handleSubmit={this.handleSubmit}
             handleChecked={this.handleChecked}
             handleChange={this.handleChange}
@@ -329,7 +328,7 @@ class AllRecipesContainer extends Component {
               shape="circle"
               icon="plus"
               size="large"
-              onClick={this.handleOpenAddModal}
+              onClick={this.handleOpen}
             />
           </div>
         </div>
