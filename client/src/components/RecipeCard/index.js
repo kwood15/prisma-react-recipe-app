@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Popconfirm, Card, Icon, Button } from 'antd';
 
@@ -13,8 +13,15 @@ const RecipeCard = ({
   ingredients,
   published
 }) => {
+  const [isLoading, setLoadingStatus] = useState(true);
+
+  useEffect(() => {
+    setLoadingStatus(false);
+  });
+
   return (
     <Card
+      loading={isLoading}
       title={title}
       bordered={false}
       extra={(
@@ -82,12 +89,12 @@ RecipeCard.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   content: PropTypes.shape({}),
+  published: PropTypes.bool.isRequired,
   directions: PropTypes.string.isRequired,
   ingredients: PropTypes.string.isRequired,
   handleOnEdit: PropTypes.func.isRequired,
   handleOnClick: PropTypes.func.isRequired,
-  handleOnDelete: PropTypes.func.isRequired,
-  published: PropTypes.bool.isRequired
+  handleOnDelete: PropTypes.func.isRequired
 };
 
 export default RecipeCard;
