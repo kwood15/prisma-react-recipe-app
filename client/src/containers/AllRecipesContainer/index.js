@@ -4,8 +4,8 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import { Card, Col, Row, Empty, Spin, Button, notification } from 'antd';
 
 // components
-import ViewRecipeModal from '../../components/modals/ViewRecipeModal';
-import AddRecipeModal from '../../components/modals/AddRecipeModal';
+import ViewRecipeModal from '../../components/Modals/ViewRecipeModal';
+import AddRecipeModal from '../../components/Modals/AddRecipeModal';
 import RecipeCard from '../../components/RecipeCard';
 
 // queries
