@@ -287,7 +287,7 @@ class AllRecipesContainer extends Component {
           {recipes && recipes.length > 0 ? (
             <Row gutter={16}>
               {recipes.map(recipe => (
-                <Col span={6} key={recipe.id}>
+                <Col lg={6} key={recipe.id}>
                   <RecipeCard
                     title={recipe.title}
                     content={(
